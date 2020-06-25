@@ -1,0 +1,29 @@
+{
+  "name": "covid-balloon",
+  "version": "1.0.0",
+  "description": "An interactive visualization to help understand the dynamics of the COVID-19 pandemic",
+  "private": true,
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.config.js --open",
+    "build": "webpack --config webpack.config.js"
+  },
+  "keywords": [
+    "COVID",
+    "coronavirus",
+    "covid19",
+    "visualization"
+  ],
+  "author": "Logan Walls",
+  "license": "ISC",
+  "dependencies": {
+    "pixi.js": "^5.3.0"
+  },
+  "devDependencies": {
+    "terser-webpack-plugin": "^3.0.6",
+    "ts-loader": "^7.0.5",
+    "typescript": "^3.9.5",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
