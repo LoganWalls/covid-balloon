@@ -21,7 +21,7 @@ export class Balloon {
                 PIXI.SCALE_MODES.NEAREST,
                 2)
         )
-        balloon.anchor.set(0.5, 0.5)
+        balloon.anchor.set(0.5)
         balloon.position.set(x, y)
         balloon.interactive = true
         balloon.buttonMode = true

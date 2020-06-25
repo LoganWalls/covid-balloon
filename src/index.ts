@@ -18,16 +18,28 @@ let animParams = {
     ticksSince: 0,
 }
 
+
+const canvasContainer = document.getElementById('canvas-container')!
+const controlsContainer = document.getElementById('controls-container')!
+
+const app = new PIXI.Application({
+    resizeTo: canvasContainer,
+    backgroundColor: 0xFFFFFF,
+    resolution: window.devicePixelRatio || 1,
+    antialias: true,
+})
+canvasContainer.appendChild(app.view)
+
+
 // Setup Sliders
-let controlsContainer = document.getElementById('controls-container')!
-let infectionRateSlider = new ValueSlider(
+const infectionRateSlider = new ValueSlider(
     controlsContainer,
     "Infection Rate",
     range(1, 3, 0.1).map(x => x.toFixed(2)),
     function (slider: ValueSlider, ev: InputEvent) {
         simParams['infectionRate'] = slider.value
     })
-let removalRateSlider = new ValueSlider(
+const removalRateSlider = new ValueSlider(
     controlsContainer,
     "Removal Rate",
     range(0, 3, 0.1).map(x => x.toFixed(2)),
@@ -36,19 +48,11 @@ let removalRateSlider = new ValueSlider(
     })
 
 
-const app = new PIXI.Application({
-    // width: 800,
-    // height: 600,
-    backgroundColor: 0xFFFFFF,
-    resolution: window.devicePixelRatio || 1,
-    antialias: true,
-})
-document.getElementById('canvas-container')?.appendChild(app.view)
 
 
 // Create balloon
-const centerX = Math.round(app.view.width / 2)
-const centerY = Math.round(app.view.height / 2)
+const centerX = Math.round(app.screen.width / 2)
+const centerY = Math.round(app.screen.height / 2)
 const balloon = new Balloon(app, centerX, centerY, 50, 50)
 
 
@@ -65,10 +69,29 @@ function dynamics(delta: number) {
     }
     animParams.ticksSince += 1;
     balloon.tick()
-    // console.log(simParams.infectedPopulation)
-    // console.log(balloon.scaleTarget)
 }
 
-app.ticker.add(dynamics)
+
+// Handle window sizing
+function resize() {
+    const parent = app.view.parentElement!
+    const width = parent.clientWidth
+    const height = parent.clientHeight
+    app.view.width = width
+    app.view.style.width = `${width}px`
+    app.view.height = height
+    app.view.style.height = `${height}px`
+    app.renderer.resize(width, height)
+    balloon.sprite.position.set(Math.round(app.screen.width / 2), Math.round(app.screen.height / 2))
+}
+
+
+
+// Start
+window.addEventListener('load', function () {
+    resize()
+    window.addEventListener('resize', resize)
+    app.ticker.add(dynamics)
+})
 
 
